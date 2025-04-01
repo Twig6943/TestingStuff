@@ -1,0 +1,29 @@
+name: Build Marne DLL
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install MinGW-w64
+        run: choco install mingw --force -y
+
+      - name: Add MinGW to PATH
+        run: echo "C:\ProgramData\chocolatey\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Compile DLL (x64)
+        run: |
+          g++ -shared -o Marne.dll source.cpp -static-libgcc -static-libstdc++ -Wl,--kill-at -m64
+
+      - name: Upload DLL
+        uses: actions/upload-artifact@v3
+        with:
+          name: Marne-x64
+          path: Marne.dll
