@@ -20,7 +20,8 @@ jobs:
 
       - name: Compile DLL (x64)
         run: |
-          g++ -shared -o Marne.dll source.cpp -static-libgcc -static-libstdc++ -Wl,--kill-at -m64
+          # Make sure source.cpp is in the repository root or adjust the path accordingly
+          g++ -shared -o Marne.dll ./source.cpp -static-libgcc -static-libstdc++ -Wl,--kill-at -m64
 
       - name: Upload DLL
         uses: actions/upload-artifact@v4
